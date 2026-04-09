@@ -40,9 +40,9 @@ Ask: "Create a notebook for [issue]"
 ```
 dynatrace-ai-workspace/
 ├── .github/
-│   ├── prompts/              # Reusable prompts (health-check, troubleshoot-problem, init)
+│   ├── prompts/              # 7 investigation workflows (health-check, daily-standup, daily-standup-notebook, investigate-error, troubleshoot-problem, incident-response, performance-regression)
 │   └── copilot-instructions.md (this file)
-├── .agents/skills/           # Dynatrace domain skills (12 total)
+├── .agents/skills/           # Dynatrace domain skills (13 total)
 │   ├── dt-app-dashboards/    # Dynatrace dashboard JSON, creation, updates
 │   ├── dt-app-notebooks/     # Dynatrace notebook creation and modification
 │   ├── dt-dql-essentials/    # DQL syntax, patterns, best practices
@@ -54,7 +54,8 @@ dynatrace-ai-workspace/
 │   ├── dt-obs-problems/      # Problem entities, RCA, impact
 │   ├── dt-obs-services/      # Service metrics, RED metrics, tracing
 │   ├── dt-obs-tracing/       # Distributed traces, spans, dependencies
-│   └── dt-migration/         # Classic → Smartscape entity migration
+│   ├── dt-migration/         # Classic → Smartscape entity migration
+│   └── dtctl/                # dtctl CLI commands and terminal workflows
 ├── .vscode/
 │   └── mcp.json              # MCP server configuration
 ├── .claude/skills/           # Alternative skill location for Claude
@@ -86,6 +87,7 @@ Skills automatically load when needed. Key skills for common tasks:
 | `dt-obs-frontends` | User sessions, RUM data | Frontend health analysis |
 | `dt-obs-kubernetes` | Cluster health, pod issues | K8s troubleshooting |
 | `dt-migration` | Entity selector mapping | Converting legacy queries |
+| `dtctl` | CLI commands, notebook verification | Terminal-level resource management |
 
 ---
 
