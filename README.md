@@ -8,7 +8,7 @@ An AI-powered observability workspace for Dynatrace — combining GitHub Copilot
 
 ## What's Inside
 
-````
+```
 dynatrace-ai-workspace/
 ├── CHEATSHEET.md                 # Quick reference — 7 copy-paste DQL queries and critical rules
 ├── ARCHITECTURE.md               # How the workspace is built and how components connect
@@ -28,11 +28,12 @@ dynatrace-ai-workspace/
 │       └── performance-regression.prompt.md
 ├── .agents/skills/               # 13 Dynatrace domain skills
 ├── .claude/skills/               # Symlinks for Claude Code compatibility
+├── .mcp.json                     # MCP server configuration for Copilot CLI
 ├── .vscode/
-│   └── mcp.json                  # Dynatrace MCP server configuration
+│   └── mcp.json                  # MCP server configuration for VS Code Copilot
 └── demos/
     └── ai-observability-demo.md  # Demo script
-````
+```
 
 | Tool | Purpose | For |
 |---|---|---|
@@ -115,7 +116,7 @@ The workspace is pre-configured with two MCP servers — the shared demo tenant
 (`guu84124`) and a personal sprint tenant. The sprint entry is specific to the
 original author and **must be updated** if you want to use your own sprint environment.
 
-Complete all three steps below to fully configure your sprint tenant. Skipping
+Complete all four steps below to fully configure your sprint tenant. Skipping
 any step will result in Copilot referencing a server that doesn't exist or
 authenticating against the wrong environment.
 
@@ -151,7 +152,24 @@ Replace `<your-tenant-id>` with your personal sprint tenant ID (e.g. `abc12345`)
 }
 ```
 
-**Step 4.B — Update `.github/copilot-instructions.md` and `CLAUDE.md`**
+**Step 4.B — Update `.mcp.json`**
+
+`.mcp.json` is used by Copilot CLI and must stay in sync with `.vscode/mcp.json`.
+Run this command to regenerate it from your updated `.vscode/mcp.json`:
+
+```bash
+jq "{mcpServers: .servers}" .vscode/mcp.json > .mcp.json
+```
+
+Verify the output looks correct before continuing:
+
+```bash
+cat .mcp.json
+```
+
+You should see both MCP server entries with your sprint tenant ID in place.
+
+**Step 4.C — Update `.github/copilot-instructions.md` and `CLAUDE.md`**
 
 Find the Environment table in both files and update the fallback server name and URL to match your tenant ID:
 
@@ -161,7 +179,7 @@ Find the Environment table in both files and update the fallback server name and
 
 Both `.github/copilot-instructions.md` (GitHub Copilot) and `CLAUDE.md` (Claude Code) must be updated with your tenant ID or they will reference the original author's sprint environment.
 
-**Step 4.C — Authenticate dtctl**
+**Step 4.D — Authenticate dtctl**
 
 ```bash
 # Local desktop (macOS/Windows/Linux with keyring): OAuth login
@@ -265,6 +283,21 @@ The Dynatrace MCP server gives Copilot live API access to your environment. When
 
 **Always start with problems, never with broad log searches.** Broad log queries without a problem context will hit Dynatrace's 500GB scan limit and return zero results. The prompts enforce this automatically.
 
+### MCP Configuration Files
+
+This workspace maintains two MCP configuration files that must be kept in sync:
+
+| File | Used By |
+|---|---|
+| `.vscode/mcp.json` | VS Code GitHub Copilot and Claude Code |
+| `.mcp.json` | GitHub Copilot CLI |
+
+When adding or updating MCP servers, always update both files. Regenerate `.mcp.json` from `.vscode/mcp.json` using:
+
+```bash
+jq "{mcpServers: .servers}" .vscode/mcp.json > .mcp.json
+```
+
 ---
 
 ## dtctl CLI
@@ -302,6 +335,9 @@ dtctl query 'fetch dt.davis.problems | filter event.status == "ACTIVE" | limit 5
 # Update all skills to latest
 npx skills add dynatrace/dynatrace-for-ai
 npx skills add dynatrace-oss/dtctl
+
+# Regenerate .mcp.json after any MCP server changes
+jq "{mcpServers: .servers}" .vscode/mcp.json > .mcp.json
 
 # Commit the updates
 git add .
