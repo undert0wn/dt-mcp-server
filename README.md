@@ -12,6 +12,7 @@ An AI-powered observability workspace for Dynatrace — combining GitHub Copilot
 dynatrace-ai-workspace/
 ├── CHEATSHEET.md                 # Quick reference — 7 copy-paste DQL queries and critical rules
 ├── ARCHITECTURE.md               # How the workspace is built and how components connect
+├── ELI5.md                       # Beginner-friendly 15-minute install guide
 ├── README.md                     # Setup guide and quick reference
 ├── CLAUDE.md                     # Auto-loaded session briefing for Claude Code
 ├── skills-lock.json              # Locked skill versions

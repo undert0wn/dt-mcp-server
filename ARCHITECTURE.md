@@ -277,4 +277,5 @@ curl -fsSL https://raw.githubusercontent.com/dynatrace-oss/dtctl/main/install.sh
 | dtctl CLI + skill | [github.com/dynatrace-oss/dtctl](https://github.com/dynatrace-oss/dtctl) |
 | copilot-instructions.md | Lean session briefing auto-loaded by GitHub Copilot |
 | CLAUDE.md | Lean session briefing auto-loaded by Claude Code |
+| ELI5.md | Beginner-friendly 15-minute install guide |
 | daily-standup-notebook prompt | Built in this session with DQL guardrails from live testing |
