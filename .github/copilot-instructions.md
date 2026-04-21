@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| **Default MCP server** | `guu84124-mcp` → https://guu84124.apps.dynatrace.com |
+| **Default MCP server** | `demo.live` → https://guu84124.apps.dynatrace.com |
 | **Fallback MCP server** | `tdg63684-mcp` → https://tdg63684.sprint.apps.dynatracelabs.com |
 
 To target a specific environment for a session:
@@ -35,3 +35,24 @@ Type `/` in Copilot Chat to access these slash commands:
 ## Skills
 
 13 domain knowledge skills are installed in `.agents/skills/`. They load automatically when relevant — no manual loading required.
+
+## Notebook Authoring Guardrails (Dynatrace)
+
+When creating or updating Dynatrace notebooks:
+
+- Prefer JSON payloads over YAML for `dtctl apply`.
+- Always include explicit section metadata for DQL sections:
+  - `type: dql`
+  - `showTitle`
+  - `state.input.timeframe`
+  - `state.input.value`
+  - `state.querySettings`
+  - `state.visualization`
+  - `visualizationSettings`
+- Always include notebook `id` when updating an existing notebook.
+- Never concatenate multiple notebook documents into one file.
+- Avoid non-ASCII punctuation in DQL comments and query text.
+- After apply, immediately run:
+  1. `dtctl get notebook <id> -o yaml --plain`
+  2. verify each DQL section has non-empty `state.input.value`
+- If duplicate notebook names exist, prefer ID-based operations and report ownership/access constraints.

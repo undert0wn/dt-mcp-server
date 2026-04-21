@@ -229,4 +229,4 @@ If hitting 500GB limit:
 
 ---
 
-**Last Updated:** April 10, 2026 | **Default MCP:** guu84124-mcp | **Status:** Production
+**Last Updated:** April 10, 2026 | **Default MCP:** demo.live | **Status:** Production

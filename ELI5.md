@@ -36,7 +36,7 @@ Then open the folder in VS Code: **File → Open Folder**.
 curl -fsSL https://raw.githubusercontent.com/dynatrace-oss/dtctl/main/install.sh | bash
 
 # Connect to the demo environment
-dtctl auth login --context guu84124 \
+dtctl auth login --context demo.live \
   --environment "https://guu84124.apps.dynatrace.com"
 
 # Verify it works
@@ -71,7 +71,7 @@ This activates the Dynatrace live data connection. The first time you use a prom
 In Copilot Chat or Claude Code, type:
 
 ```
-Using the guu84124-mcp server, list the top 5 services by request volume in the last hour
+Using the demo.live server, list the top 5 services by request volume in the last hour
 ```
 
 If you see a table of services with request counts — you are live.

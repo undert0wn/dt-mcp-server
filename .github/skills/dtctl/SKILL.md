@@ -7,25 +7,6 @@ description: Investigate incidents, debug performance issues, analyze logs, and 
 
 Operate `dtctl`, the kubectl-style CLI for Dynatrace. This skill teaches core dtctl command patterns and operations.
 
-## 📂 File Storage Convention — DQL Reference Files
-
-All DQL query files used for exploration, validation, or reference **must be saved to**:
-
-```
-dtctl_tenant_reference_files/dql_reference_files/
-```
-
-**Examples:**
-- `dtctl_tenant_reference_files/dql_reference_files/query_battery.dql`
-- `dtctl_tenant_reference_files/dql_reference_files/service-error-analysis.dql`
-
-**When to use file-based queries:**
-- PowerShell quoting issues (inline queries with quotes fail; use `--file` instead)
-- Complex multi-line DQL (more readable in a file)
-- Reusable query templates
-
-This keeps the workspace root clean and organizes all reference materials logically.
-
 ## Recommended Initialization
 
 At the start of a task, run these checks to establish context and permissions:
@@ -311,36 +292,3 @@ For detailed visualizationSettings (singleValue, charts, tables, thresholds, uni
 - Confirm context + safety level before destructive ops; prefer `get/describe` first
 - Use `--mine` flag to filter resources you own
 - For multi-tenant work, see [references/config-management.md](references/config-management.md)
-
-
-## REQUIRED Workflow: Notebook Create/Update
-
-For any notebook create/update request, run this sequence:
-
-1. Identify target:
-   - `dtctl get notebooks -o json --plain`
-   - select by exact ID when available
-2. Export current:
-   - `dtctl get notebook <id> -o yaml --plain`
-3. Build payload:
-   - Prefer JSON payload for apply
-   - Include explicit DQL section metadata:
-     - `type: dql`
-     - `showTitle`
-     - `state.input.timeframe`
-     - `state.input.value`
-     - `state.querySettings`
-     - `state.visualization`
-     - `visualizationSettings`
-4. Apply:
-   - `dtctl apply -f <payload>.json --plain`
-5. Verify:
-   - `dtctl get notebook <id> -o yaml --plain`
-   - confirm each DQL section has non-empty `state.input.value`
-6. Validate data:
-   - run at least one DQL query from the notebook with `dtctl query ... -o json --plain`
-
-Do not:
-- rely only on notebook name if duplicates exist
-- apply multi-document notebook files
-- use non-ASCII punctuation in DQL comments

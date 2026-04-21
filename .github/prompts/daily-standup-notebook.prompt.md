@@ -2,7 +2,7 @@
 agent: agent
 description: Generate a daily standup report for JourneyService and CheckDestination, create an actionable Dynatrace notebook with embedded DQL queries and remediation steps, then verify it using dtctl.
 ---
-Run a daily standup report for JourneyService and CheckDestination using the guu84124-mcp server.
+Run a daily standup report for JourneyService and CheckDestination using the demo.live server.
 
 Then create a Dynatrace notebook called "Daily Standup — JourneyService & CheckDestination — [TODAY'S DATE]".
 

@@ -12,7 +12,7 @@
         "DT_ENVIRONMENT": "https://tdg63684.sprint.apps.dynatracelabs.com"
       }
     },
-    "guu84124-mcp": {
+    "demo.live": {
       "type": "stdio",
       "command": "npx",
       "args": [

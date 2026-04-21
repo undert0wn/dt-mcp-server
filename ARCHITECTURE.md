@@ -50,7 +50,7 @@ This workspace solves all four problems by combining three things: domain knowle
 │              Dynatrace Platform                           │
 │                                                           │
 │   guu84124.apps.dynatrace.com  (production)               │
-│   bon05374.sprint.apps.dynatracelabs.com  (sprint)        │
+│   tdg63684.sprint.apps.dynatracelabs.com  (sprint)        │
 │                                                           │
 │   Grail data lakehouse — logs, spans, metrics, events     │
 │   Davis AI — problem detection, root cause analysis       │
@@ -103,14 +103,16 @@ The Model Context Protocol (MCP) server is the live data bridge between Copilot 
 Two environments are configured as named servers:
 
 ```json
-guu84124-mcp  →  https://guu84124.apps.dynatrace.com        (production)
-bon05374-mcp  →  https://bon05374.sprint.apps.dynatracelabs.com  (sprint)
+demo.live  →  https://guu84124.apps.dynatrace.com        (production)
+guu84124  →  https://guu84124.apps.dynatrace.com        (production)
+tdg63684-mcp  →  https://tdg63684.sprint.apps.dynatracelabs.com  (sprint)
+liit  →  https://tdg63684.sprint.apps.dynatracelabs.com  (sprint)
 ```
 
 Authentication uses OAuth browser SSO — no API tokens or credentials are stored in the workspace. To target a specific environment in a Copilot session:
 
 ```
-"Use the guu84124-mcp server for all queries"
+"Use the demo.live server for all queries"
 ```
 
 ---
@@ -192,17 +194,21 @@ dtctl get workflows                    # List all workflows
 dtctl doctor                           # Verify authentication and connectivity
 ```
 
-Two authenticated contexts are configured:
+Three authenticated contexts are configured:
 
 ```
-guu84124   →  production  (default)
-bon05374   →  sprint
+demo.live   →  production  (default)
+guu84124   →  production 
+tdg63684   →  sprint
+liit   →  sprint
 ```
 
 Switch between them with:
 ```bash
+dtctl config use-context demo.live
 dtctl config use-context guu84124
-dtctl config use-context bon05374
+dtctl config use-context tdg63684
+dtctl config use-context liit
 ```
 
 ---
@@ -215,7 +221,7 @@ Here is the complete flow for a typical `/daily-standup-notebook` session:
 1. You type /daily-standup-notebook in Copilot Chat
 
 2. Copilot loads copilot-instructions.md
-   → Knows to use guu84124-mcp by default
+   → Knows to use demo.live by default
    → Knows the investigation rules and DQL guardrails
 
 3. Copilot loads relevant skills
@@ -224,7 +230,7 @@ Here is the complete flow for a typical `/daily-standup-notebook` session:
    → dt-app-notebooks (notebook structure)
    → dtctl            (verification commands)
 
-4. Copilot calls guu84124-mcp
+4. Copilot calls demo.live
    → Executes live DQL queries against production
    → Retrieves metrics, problems, and deployment data
 

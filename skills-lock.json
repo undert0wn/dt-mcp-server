@@ -4,62 +4,62 @@
     "dt-app-dashboards": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "1e97f41b49df5facd4116fc48e25654dae46dec140fe01f48a208d1951126599"
+      "computedHash": "2bf38040316c7c90e6a9209ad1ec66f945eba0350556e6453433dfe1ba7d9936"
     },
     "dt-app-notebooks": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "7da21f4a3ca825474aefd30acccbe9f05fa7ba49ad088b30154a51d9a6080f6a"
+      "computedHash": "6986d7ed34ed9ab10af0c26c1f0645fa4246383818ee71d32356e050ecb65289"
     },
     "dt-dql-essentials": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "9633066dc0f16ab7e806c4fb0222715dd968d03866399f10872b7247110a6f11"
+      "computedHash": "8988aa12e1e3b1e5e7ef8bd98dcc60a58e54565e279683f786bd87be6bb040ad"
     },
     "dt-migration": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "a0c91f3d0d73f21db0c6d754f65573efa91c5ba462eaa5d995c9f39ea1bfc7de"
+      "computedHash": "6a8316899af4a0f174948c5758da6054bd23226ffe3da934c37b1e47c0b467d4"
     },
     "dt-obs-aws": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "6db721d3139142942ec487913685cc8e3b9b8bf86b164d6bbf7ac4a9869c7687"
+      "computedHash": "cb62258d68329f619a944df188ba1c1c2f6ecead35dc50ec1ea3da078e3b8c34"
     },
     "dt-obs-frontends": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "196c4eeb3eb18e477f99db016761402be94e0b573fc2ad5a8fb60affedf78ec0"
+      "computedHash": "49083cb286c9f53d282195e8817814f9e1a003bf14d6d3db9d50895d6b630afc"
     },
     "dt-obs-hosts": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "06e561cb7debd954a885680edef8404a3921c1f8b0f76cdb0144ce79a7e7add9"
+      "computedHash": "28b560750b829a1b433afd93eaf2f2ff564681f80d7ce4219f0d014582d79167"
     },
     "dt-obs-kubernetes": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "5efe54f56c3c84acdd278ca0d425115939dbea8e3792549aea936c54702c5027"
+      "computedHash": "b497f14dd15ed64977d1bf739f35f57701e11b10d864b729f045c0586850a484"
     },
     "dt-obs-logs": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "9e51796ef92508ff9789762e644d241d6a0734074d5d708b9bc2585238deea5d"
+      "computedHash": "26ef21fad21621e580a54cb20b95920bbc49d2e0f758158c53bc07a111429595"
     },
     "dt-obs-problems": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "c1a9c940c6354ec463b64a4a8a858a84f7d37dbf3e2e886d3ae7f3d8d876a01a"
+      "computedHash": "ac3146df79f8a3e54a54fbc77f7b625e1b57ce0120a273ba62e507d71630208b"
     },
     "dt-obs-services": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "263186926a128143a3f03a006f6df5dc50722c99b4d7f2e28b700c9fb01c1040"
+      "computedHash": "1f0982bc20b33ef678f4b92458c1e325dbd55d90b44757b14a2614967086d384"
     },
     "dt-obs-tracing": {
       "source": "dynatrace/dynatrace-for-ai",
       "sourceType": "github",
-      "computedHash": "defe0758376693957ab4a880f67ce0dfd610313225980b1c5e756cfbd5006780"
+      "computedHash": "83a64cced44a72882bcbcda7fc37afaa641767734768d8d479c7221ba022afd7"
     },
     "dtctl": {
       "source": "dynatrace-oss/dtctl",

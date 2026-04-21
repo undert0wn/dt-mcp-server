@@ -94,14 +94,14 @@ required for demo workflows in this workspace.
 curl -fsSL https://raw.githubusercontent.com/dynatrace-oss/dtctl/main/install.sh | bash
 
 # Local desktop (macOS/Windows/Linux with keyring): OAuth login
-dtctl auth login --context guu84124 \
+dtctl auth login --context demo.live \
   --environment "https://guu84124.apps.dynatrace.com"
 
 # GitHub Codespaces / CI: token-based auth
-dtctl config set-context guu84124 \
+dtctl config set-context demo.live \
   --environment "https://guu84124.apps.dynatrace.com" \
-  --token-ref guu84124-token
-dtctl config set-credentials guu84124-token --token <YOUR_PLATFORM_TOKEN>
+  --token-ref demo.live-token
+dtctl config set-credentials demo.live-token --token <YOUR_PLATFORM_TOKEN>
 
 # Verify
 dtctl doctor
@@ -121,7 +121,7 @@ Complete all four steps below to fully configure your sprint tenant. Skipping
 any step will result in Copilot referencing a server that doesn't exist or
 authenticating against the wrong environment.
 
-> If you only need the shared demo tenant (`guu84124`), skip this section entirely —
+> If you only need the shared demo tenant (`guu84124`,`demo.live`), skip this section entirely —
 > no sprint configuration is required for demos.
 
 #### Sprint Tenant Checklist
@@ -133,7 +133,7 @@ Replace `<your-tenant-id>` with your personal sprint tenant ID (e.g. `abc12345`)
 ```json
 {
   "servers": {
-    "guu84124-mcp": {
+    "demo.live": {
       "type": "stdio",
       "command": "npx",
       "args": ["-y", "@dynatrace-oss/dynatrace-mcp-server@latest", "--stdio"],
@@ -209,7 +209,7 @@ to VS Code. Subsequent sessions authenticate automatically.
 **GitHub Copilot users:** In Copilot Chat, type:
 
 ```
-Using the guu84124-mcp server, list the top 5 services by request volume in the last hour
+Using the demo.live server, list the top 5 services by request volume in the last hour
 ```
 
 **Claude Code users:** In Claude Code, type the same query or copy it from the GitHub Copilot instruction above.
@@ -310,14 +310,14 @@ jq "{mcpServers: .servers}" .vscode/mcp.json > .mcp.json
 curl -fsSL https://raw.githubusercontent.com/dynatrace-oss/dtctl/main/install.sh | bash
 
 # Local desktop (macOS/Windows/Linux with keyring): OAuth login
-dtctl auth login --context guu84124 \
+dtctl auth login --context demo.live \
   --environment "https://guu84124.apps.dynatrace.com"
 
 # GitHub Codespaces / CI: token-based auth
-dtctl config set-context guu84124 \
+dtctl config set-context demo.live \
   --environment "https://guu84124.apps.dynatrace.com" \
-  --token-ref guu84124-token
-dtctl config set-credentials guu84124-token --token <YOUR_PLATFORM_TOKEN>
+  --token-ref demo.live-token
+dtctl config set-credentials demo.live-token --token <YOUR_PLATFORM_TOKEN>
 
 # Verify
 dtctl doctor

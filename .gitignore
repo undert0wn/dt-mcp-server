@@ -10,3 +10,4 @@ node_modules/
 
 # Logs
 *.log
+dtctl_tenant_reference_files/
