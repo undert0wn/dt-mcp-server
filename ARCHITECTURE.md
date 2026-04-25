@@ -105,8 +105,8 @@ Two environments are configured as named servers:
 ```json
 demo.live  →  https://guu84124.apps.dynatrace.com        (production)
 guu84124  →  https://guu84124.apps.dynatrace.com        (production)
-tdg63684-mcp  →  https://tdg63684.sprint.apps.dynatracelabs.com  (sprint)
-liit  →  https://tdg63684.sprint.apps.dynatracelabs.com  (sprint)
+YOURTENANTID-mcp  →  https://YOURTENANTID.sprint.apps.dynatracelabs.com  (sprint)
+NICKNAME  →  https://YOURTENANTID.sprint.apps.dynatracelabs.com  (sprint)
 ```
 
 Authentication uses OAuth browser SSO — no API tokens or credentials are stored in the workspace. To target a specific environment in a Copilot session:
@@ -199,7 +199,7 @@ Three authenticated contexts are configured:
 ```
 demo.live   →  production  (default)
 guu84124   →  production 
-tdg63684   →  sprint
+YOURTENANTID   →  sprint
 liit   →  sprint
 ```
 
@@ -207,7 +207,7 @@ Switch between them with:
 ```bash
 dtctl config use-context demo.live
 dtctl config use-context guu84124
-dtctl config use-context tdg63684
+dtctl config use-context YOURTENANTID
 dtctl config use-context liit
 ```
 
