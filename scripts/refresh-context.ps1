@@ -81,7 +81,7 @@ foreach ($type in $typesToProcess) {
 }
 
 if ($updated) {
-    $registry.lastValidated = (Get-Date -Format "yyyy-MM-ddTHH:mm:ss.fffZ")
+    $registry.lastValidated = (Get-Date -AsUTC -Format "yyyy-MM-ddTHH:mm:ss.fffZ")
     $registry.validationStatus = "validated"
     $registry | ConvertTo-Json -Depth 10 | Out-File -FilePath $RegistryPath -Encoding utf8
     Write-Host "`nRegistry updated successfully." -ForegroundColor Green
