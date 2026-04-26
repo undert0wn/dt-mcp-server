@@ -18,7 +18,7 @@ This file (and its counterpart) defines **exactly** how any agent interacts with
 **Mandatory agent initialization sequence** (review files first, then run/validate):
 1. Read this file + `CLAUDE.md` + `ARCHITECTURE.md` + `CONVENTIONS.md`.
 2. **ALWAYS load `.agents/skills/dt-dql-essentials/SKILL.md` FIRST** (before any DQL).
-3. Review **all** relevant workspace files (`current-notebook.json`, `temp_dtctl_files/**`, `clean-dashboard.json`, skills, memories/repo/*). Use temp/ only for experiments.
+3. Review **all** relevant workspace files (`current-notebook.json`, `temp_dtctl_files/**`, `clean-dashboard.json`, skills, `memories/repo/*`). Use temp/ only for experiments.
 4. For dtctl/MCP tenant context: Run `dtctl config current-context`, `dtctl auth whoami --plain`, and/or MCP `get_environment_info` / `find_entity_by_name`.
 5. Follow the Global Rule and all Agent-Agnostic DQL Rules below strictly. No tenant-specific names/IDs in root source files.
 
