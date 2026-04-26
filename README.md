@@ -1,6 +1,10 @@
-# dynatrace-ai-workspace
+# dt-mcp-server
 
-An AI-powered observability workspace for Dynatrace — combining GitHub Copilot or Claude AI, the Dynatrace MCP server, and the [dynatrace-for-ai](https://github.com/Dynatrace/dynatrace-for-ai) skills framework to accelerate incident triage, root cause analysis, and day-to-day observability workflows.
+**This is a modified and extended version of the [dynatrace-for-ai](https://github.com/Dynatrace/dynatrace-for-ai) project**, with added MCP server integration, per-app smart reconciliation, Live State Conflict Protection, Windows-first documentation, and non-technical accessibility improvements.
+
+**ELI5:** You are setting up an AI assistant that can answer questions about your Dynatrace environment in plain English. Type a question → get a real answer from live production data.
+
+An AI-powered observability workspace for Dynatrace — combining GitHub Copilot or Claude AI, the Dynatrace MCP server, and the dynatrace-for-ai skills framework to accelerate incident triage, root cause analysis, and day-to-day observability workflows.
 
 > **What this gives you:** Ask AI natural language questions about your Dynatrace environment and get accurate, production-aware answers — powered by verified domain knowledge, live API access, and pre-built investigation workflows.
 
@@ -12,9 +16,11 @@ An AI-powered observability workspace for Dynatrace — combining GitHub Copilot
 dynatrace-ai-workspace/
 ├── CHEATSHEET.md                 # Quick reference — 7 copy-paste DQL queries and critical rules
 ├── ARCHITECTURE.md               # How the workspace is built and how components connect
+├── CONVENTIONS.md                # Single source of truth for all agent rules (reconciliation, DQL, Sync Checklist)
 ├── ELI5.md                       # Beginner-friendly 15-minute install guide
 ├── README.md                     # Setup guide and quick reference
 ├── CLAUDE.md                     # Auto-loaded session briefing for Claude Code
+├── scripts/                      # Validation helpers (validate-tenant-write.ps1 runs before any dtctl tenant write)
 ├── skills-lock.json              # Locked skill versions
 ├── .gitignore
 ├── .github/
@@ -36,14 +42,13 @@ dynatrace-ai-workspace/
     └── ai-observability-demo.md  # Demo script
 ```
 
-| Tool | Purpose | For |
+| What | Why | Get It |
 |---|---|---|
-| [VS Code](https://code.visualstudio.com/) | Editor with Copilot/Claude Chat | Both |
-| [GitHub Copilot](https://github.com/features/copilot) | AI assistant | GitHub Copilot (subscription) |
-| [Claude Code](https://claude.ai/code) | AI assistant | Claude AI (Pro or Team) |
-| [Node.js](https://nodejs.org/) v18+ | Required for skills installer and MCP server | Both |
-| [dtctl](https://github.com/dynatrace-oss/dtctl) | Dynatrace open-source CLI for agents & humans to manage observability resources | Both |
-| A Dynatrace environment | `https://<env>.apps.dynatrace.com` or `https://<env>.sprint.apps.dynatracelabs.com` | Both |
+| [VS Code](https://code.visualstudio.com/) | Where you will work with the AI | Download from code.visualstudio.com |
+| GitHub Copilot or Claude Code | The AI brain | Copilot: github.com/features/copilot (subscription) · Claude: claude.ai/code |
+| [Node.js](https://nodejs.org/) v18+ | Powers the skill installer and MCP server | Download LTS version |
+| [dtctl](https://github.com/dynatrace-oss/dtctl) | Lets you verify what the AI creates (notebooks, dashboards, etc.) | See Step 3 below |
+| A Dynatrace environment | Live data source | Any `*.apps.dynatrace.com` tenant you have access to |
 
 ---
 
@@ -66,10 +71,24 @@ Select your setup path below. Both receive the same skills, prompts, and MCP ser
 
 **Claude Code Path** → Follow Steps 1–5, then open `CLAUDE.md` in your Claude Code session. Claude loads `.claude/skills/` symlinks automatically.
 
+### Recommended VS Code Extensions (GitHub Copilot users)
+
+This workspace assumes **VS Code + GitHub Copilot**. Install these extensions from the VS Code marketplace before setup:
+
+| Extension | Why |
+|---|---|
+| **GitHub Copilot Chat** | Main AI assistant for the workspace |
+| **Dynatrace Apps** | Strato app development and dashboard component support |
+| **Dynatrace Debugging Extension** | Debugging and testing in Dynatrace |
+| **PowerShell** | Enables validation scripts (validate-tenant-write.ps1, refresh-context.ps1) |
+| **GitLens** | Git history, blame, branch management — helpful for collaboration |
+
+> **Claude Code users:** No extension installation needed — Claude Code runs in the web browser or desktop app.
+
 ### 1. Clone the workspace
 
 ```bash
-git clone https://github.com/virtualrussel/dynatrace-ai-workspace.git
+git clone https://github.com/israel-salgado/dynatrace-ai-workspace.git
 cd dynatrace-ai-workspace
 ```
 
@@ -84,15 +103,26 @@ npx skills add dynatrace-oss/dtctl
 
 > Run this command any time Dynatrace releases new skills.
 
-### 3. Configure dtctl for the shared demo tenant
+### 3. Install and configure dtctl
 
-`dtctl` is used for terminal-level verification and resource management. It is
-required for demo workflows in this workspace.
+`dtctl` is a command-line tool that lets you verify what the AI creates — like checking that a notebook it built actually exists in Dynatrace.
+
+**Install dtctl first:**
 
 ```bash
 # macOS / Linux — direct install (no package manager required)
 curl -fsSL https://raw.githubusercontent.com/dynatrace-oss/dtctl/main/install.sh | bash
 
+# Windows — install via npm (requires Node.js v18+, recommended option)
+npm install -g @dynatrace-oss/dtctl
+
+# Verify installation across all platforms
+dtctl --version
+```
+
+**Then authenticate to the demo tenant:**
+
+```bash
 # Local desktop (macOS/Windows/Linux with keyring): OAuth login
 dtctl auth login --context demo.live \
   --environment "https://guu84124.apps.dynatrace.com"
@@ -215,6 +245,23 @@ Using the demo.live server, list the top 5 services by request volume in the las
 **Claude Code users:** In Claude Code, type the same query or copy it from the GitHub Copilot instruction above.
 
 If you see a table of services with request counts — you are live and ready to demo.
+
+## What Just Happened?
+
+| Piece | What It Does | Analogy |
+|---|---|---|
+| Skills | Domain knowledge about Dynatrace | A textbook the AI reads before answering |
+| MCP server | Live connection to your Dynatrace data | A phone line to production |
+| Prompts | Pre-built investigation workflows | Recipes you follow step by step |
+| dtctl | Terminal access for verification | An inspector who checks the AI's work |
+
+## Your First Commands
+
+| Type This | What It Does |
+|---|---|
+| `/health-check` | Is my service healthy right now? |
+| `/incident-response` | What is currently broken in production? |
+| `/daily-standup` | Give me a morning report across all services |
 
 ---
 

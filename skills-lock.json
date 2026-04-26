@@ -65,6 +65,16 @@
       "source": "dynatrace-oss/dtctl",
       "sourceType": "github",
       "computedHash": "23a151ff42d26cd83bee2a2848c46ac00efd292d9943e30a313f827af6c84ed5"
+    },
+    "dtctl-release": {
+      "source": "dynatrace-oss/dtctl",
+      "sourceType": "github",
+      "computedHash": "f35613306c523c9ed4123421023b878868d9b5bbc98dee8a16991e099586c124"
+    },
+    "pr-review": {
+      "source": "dynatrace-oss/dtctl",
+      "sourceType": "github",
+      "computedHash": "4a115a1d89404f661378001880e2e1ca2991e97d19bbfcbe13859df83eaf8dfa"
     }
   }
 }

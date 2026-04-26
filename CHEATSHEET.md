@@ -196,8 +196,14 @@ fetch spans | filter trace_id == "[TRACE-ID]" | sort start_time asc
 
 **Switch MCP Server:**
 ```
-"For all queries, use the bon05374-mcp server"
+"For all queries, use the tdg63684-mcp server"
 ```
+
+**Workspace Conventions**: See governing briefing (`copilot-instructions.md` or `CLAUDE.md`) + `CONVENTIONS.md` (single source of truth for temp organization, Live State Reconciliation & Conflict Protection, review mandates, Sync Checklist, and redundancy reduction). 
+- Always review `temp_dtctl_files/**` first (`list_dir` + `grep_search`).
+- For notebooks/dashboards: re-export live state before any AI change; stop and ask on conflict with manual edits.
+- Organize experiments strictly by subfolder; keep root generic.
+- Follow mandatory initialization sequence on every agent switch.
 
 **Parallel Queries:**
 Multiple unrelated queries in same prompt = faster than sequential

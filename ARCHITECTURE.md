@@ -105,8 +105,8 @@ Two environments are configured as named servers:
 ```json
 demo.live  →  https://guu84124.apps.dynatrace.com        (production)
 guu84124  →  https://guu84124.apps.dynatrace.com        (production)
-tdg63684-mcp  →  https://tdg63684.sprint.apps.dynatracelabs.com  (sprint)
-liit  →  https://tdg63684.sprint.apps.dynatracelabs.com  (sprint)
+YOURTENANTID-mcp  →  https://YOURTENANTID.sprint.apps.dynatracelabs.com  (sprint)
+NICKNAME  →  https://YOURTENANTID.sprint.apps.dynatracelabs.com  (sprint)
 ```
 
 Authentication uses OAuth browser SSO — no API tokens or credentials are stored in the workspace. To target a specific environment in a Copilot session:
@@ -174,6 +174,8 @@ The two files are identical in content but kept separate because each tool requi
 - GitHub Copilot reads only `.github/copilot-instructions.md`
 - Claude Code reads only `CLAUDE.md` at the repo root
 
+They now reference the committed `CONVENTIONS.md` (single source of truth for workspace/temp rules, Live State Reconciliation & Conflict Protection, Sync Checklist). `dt-dql-essentials/SKILL.md` and `dt-app-notebooks/SKILL.md` are the canonical references for their domains. The memory file holds only lightweight AI-side notes.
+
 ---
 
 ### 5. dtctl CLI
@@ -199,7 +201,7 @@ Three authenticated contexts are configured:
 ```
 demo.live   →  production  (default)
 guu84124   →  production 
-tdg63684   →  sprint
+YOURTENANTID   →  sprint
 liit   →  sprint
 ```
 
@@ -207,7 +209,7 @@ Switch between them with:
 ```bash
 dtctl config use-context demo.live
 dtctl config use-context guu84124
-dtctl config use-context tdg63684
+dtctl config use-context YOURTENANTID
 dtctl config use-context liit
 ```
 
@@ -272,6 +274,13 @@ curl -fsSL https://raw.githubusercontent.com/dynatrace-oss/dtctl/main/install.sh
 ```
 
 ---
+
+## Source References
+
+### Reference Extraction Pattern
+- Use `reference/official/` to hold copies of key files from the official MCP server (`davis-analyzers.ts`, `execute-dql.ts`, `notebooks.ts`, `send-event.ts`, etc.).
+- Extract patterns (interfaces, execution logic, metadata handling, error patterns) into dedicated skills (`dt-davis-analyzers`, `dt-obs-events`, updates to `dt-dql-essentials` and `dt-app-notebooks`).
+- This keeps the workspace scalable for future official MCP enhancements while preserving our skill-based architecture and guardrails.
 
 ## Source References
 

@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "tdg63684-mcp": {
+    "[YOURTENANTID]-mcp": {
       "type": "stdio",
       "command": "npx",
       "args": [
@@ -9,7 +9,7 @@
         "--stdio"
       ],
       "env": {
-        "DT_ENVIRONMENT": "https://tdg63684.sprint.apps.dynatracelabs.com"
+        "DT_ENVIRONMENT": "https://[YOURTENANTID].apps.dynatrace.com"
       }
     },
     "demo.live": {
