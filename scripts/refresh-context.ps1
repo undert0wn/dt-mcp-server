@@ -58,8 +58,8 @@ foreach ($type in $typesToProcess) {
         Write-Host "  Re-exporting $($app.name) (ID: $($app.id))..." -ForegroundColor Gray
 
         try {
-            $cmd = "dtctl get $resourceName $($app.id) -o json --plain"
-            $liveJson = Invoke-Expression $cmd
+            $dtctlArgs = @("get", $resourceName, $app.id, "-o", "json", "--plain")
+            $liveJson = & dtctl @dtctlArgs
 
             $liveJson | Out-File -FilePath $liveFile -Encoding utf8
             $liveObj = $liveJson | ConvertFrom-Json
