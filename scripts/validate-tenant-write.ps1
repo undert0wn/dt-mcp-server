@@ -79,12 +79,25 @@ if (-not $Id) {
 if (-not $isNew) {
     # Refresh live state for THIS existing resource only
     Write-Host "Fetching live state for $ResourceType $Id..." -ForegroundColor Yellow
-    $liveOutput = & dtctl get $ResourceType $Id -o json 2>&1
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Failed to fetch live state: $liveOutput"
-        exit 1
+    $stderrPath = [System.IO.Path]::GetTempFileName()
+    try {
+        $liveOutput = & dtctl get $ResourceType $Id -o json --plain 2> $stderrPath
+        $dtctlExitCode = $LASTEXITCODE
+        $stderrOutput = if (Test-Path $stderrPath) { Get-Content $stderrPath -Raw } else { "" }
+        if ($dtctlExitCode -ne 0) {
+            if ($stderrOutput) {
+                Write-Error "Failed to fetch live state: $stderrOutput"
+            } else {
+                Write-Error "Failed to fetch live state."
+            }
+            exit 1
+        }
+        $live = $liveOutput | ConvertFrom-Json
+    } finally {
+        if (Test-Path $stderrPath) {
+            Remove-Item $stderrPath -Force -ErrorAction SilentlyContinue
+        }
     }
-    $live = $liveOutput | ConvertFrom-Json
 } else {
     $live = @{ version = 0; name = "(new)" }
 }
