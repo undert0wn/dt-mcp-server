@@ -174,6 +174,8 @@ The two files are identical in content but kept separate because each tool requi
 - GitHub Copilot reads only `.github/copilot-instructions.md`
 - Claude Code reads only `CLAUDE.md` at the repo root
 
+They now reference the committed `CONVENTIONS.md` (single source of truth for workspace/temp rules, Live State Reconciliation & Conflict Protection, Sync Checklist). `dt-dql-essentials/SKILL.md` and `dt-app-notebooks/SKILL.md` are the canonical references for their domains. The memory file holds only lightweight AI-side notes.
+
 ---
 
 ### 5. dtctl CLI
@@ -272,6 +274,13 @@ curl -fsSL https://raw.githubusercontent.com/dynatrace-oss/dtctl/main/install.sh
 ```
 
 ---
+
+## Source References
+
+### Reference Extraction Pattern
+- Use `reference/official/` to hold copies of key files from the official MCP server (`davis-analyzers.ts`, `execute-dql.ts`, `notebooks.ts`, `send-event.ts`, etc.).
+- Extract patterns (interfaces, execution logic, metadata handling, error patterns) into dedicated skills (`dt-davis-analyzers`, `dt-obs-events`, updates to `dt-dql-essentials` and `dt-app-notebooks`).
+- This keeps the workspace scalable for future official MCP enhancements while preserving our skill-based architecture and guardrails.
 
 ## Source References
 
