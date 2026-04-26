@@ -62,7 +62,7 @@ Type `/` in Copilot Chat to access these slash commands:
 
 ## Skills
 
-13 domain knowledge skills are installed in `.agents/skills/`. They load automatically when relevant — no manual loading required.
+17 domain knowledge skills are installed in `.agents/skills/`. They load automatically when relevant — no manual loading required.
 
 ## Notebook (and App) Update Contract
 
