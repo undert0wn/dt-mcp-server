@@ -116,11 +116,11 @@ This skill uses **progressive disclosure** - load only what you need:
     "input": {
       "value": "fetch dt.davis.problems | limit 10",
       "timeframe": "now()-2h"
-    }
-  },
-  "state.querySettings": {},
-  "visualization": "table",
-  "visualizationSettings": {}
+    },
+    "querySettings": {},
+    "visualization": "table",
+    "visualizationSettings": {}
+  }
 }
 ```
 
