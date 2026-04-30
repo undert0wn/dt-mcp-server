@@ -185,8 +185,6 @@ You'll edit two things in the JSON below: `NICKNAME` and `TENANTID`.
   > _**Where to find it:** open Dynatrace in your browser and look at the address bar. The first 8 characters of the hostname are your tenant ID._
   >
   > _![Tenant ID location in Dynatrace URL bar](docs/images/tenant-id-location.png)_
-  >
-  > _(If the screenshot above is missing, see `docs/images/README.md` for instructions on adding it.)_
 
 - **`NICKNAME`** is any short label you'll remember. You'll say it in chat — *"use the **prod-east** server, list services"*. Pick anything: `prod-east`, `sandbox`, `liit`, etc.
 - **The URL ending** depends on which kind of tenant you have:
