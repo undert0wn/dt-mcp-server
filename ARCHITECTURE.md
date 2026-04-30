@@ -46,16 +46,16 @@ This workspace solves all four problems by combining three things: domain knowle
 └───────────┼────────────────────────────┼────────────────┘
             │ MCP (stdio)                │ HTTPS + OAuth
             ▼                            ▼
-┌───────────────────────────────────────────────────────────┐
-│              Dynatrace Platform                           │
-│                                                           │
-│   guu84124.apps.dynatrace.com  (production, public baseline)  │
-│   <TENANTID>.<class>.dynatrace[labs].com  (any other)        │
-│                                                           │
-│   Grail data lakehouse — logs, spans, metrics, events     │
-│   Davis AI — problem detection, root cause analysis       │
-│   Notebooks, Dashboards, Workflows                        │
-└───────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                      Dynatrace Platform                         │
+│                                                                 │
+│   guu84124.apps.dynatrace.com  (production, public baseline)    │
+│   <TENANTID>.<class>.dynatrace[labs].com  (any other)           │
+│                                                                 │
+│   Grail data lakehouse — logs, spans, metrics, events           │
+│   Davis AI — problem detection, root cause analysis             │
+│   Notebooks, Dashboards, Workflows                              │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
