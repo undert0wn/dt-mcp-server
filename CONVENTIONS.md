@@ -5,16 +5,33 @@ This is the committed, single source of truth for agent behavior, workspace rule
 ## Governing Reference
 - **Primary files**: `.github/copilot-instructions.md` (for GitHub Copilot) and `CLAUDE.md` (for Claude). Both are auto-loaded at session start and kept in sync.
 - They define tenant interaction via MCP/dtctl, context switching, Global Rule, prompts, skills, notebook guardrails, and agent initialization.
+- **Capability matrix** (which path does what): see [README.md](README.md#two-paths-to-dynatrace) → *Two paths to Dynatrace*. That table is the single source of truth for MCP-vs-dtctl coverage; the rubric in *Tool Selection* (below) tells the agent which to prefer when both can do the job.
 
 ## Mandatory Agent Initialization Sequence
 When starting a session or switching agents/tenants:
 1. Read the governing briefing file + this `CONVENTIONS.md` + `ARCHITECTURE.md`.
 2. **ALWAYS load `.agents/skills/dt-dql-essentials/SKILL.md` FIRST** (before any DQL).
 3. Review the relevant **per-app folder** (`temp_<type>_files/`) and its `current-<type>.json` + index first.
-4. Establish tenant context: `dtctl config current-context`, `dtctl auth whoami --plain`, and/or MCP `get_environment_info` / `find_entity_by_name`.
-5. Follow the Global Rule and all conventions below strictly. No tenant-specific names/IDs in root source files.
+4. Establish tenant context using whichever path(s) the user has configured:
+   - **dtctl path**: `dtctl config current-context` + `dtctl auth whoami --plain`.
+   - **MCP path**: list configured MCP servers from `.vscode/mcp.json` / `.mcp.json`, and call `get_environment_info` / `find_entity_by_name` against the active one.
+   - At least one of the two will be available; report whichever is. Do not assume dtctl is present.
+5. Follow the Global Rule, the *Tool Selection* rubric, and all conventions below strictly. No tenant-specific names/IDs in root source files.
 
 This ensures identical behavior across agents.
+
+## Tool Selection (MCP vs dtctl)
+
+Both paths can do most read/query/edit work against a Dynatrace tenant. The full capability matrix lives in [README.md](README.md#two-paths-to-dynatrace) → *Two paths to Dynatrace*; this rubric is the agent's quick decision guide.
+
+- **Prefer MCP** for: Davis CoPilot chat, Davis Analyzers, sending an ad-hoc Slack message or email from chat, ingesting a custom event (`send_event`), resetting Grail query budget, natural-language → DQL helpers, and any task where structured-JSON-direct-to-the-AI is faster than parsing terminal output.
+- **Prefer `dtctl`** for: declarative `apply` / `diff` / `history` / `restore`, document `share` / `unshare`, persistent multi-context switching with explicit safety levels, custom output formats (`yaml` / `csv` / `toon` / `wide`), `dtctl skills install`, and any operation the user wants to **see** scroll past in the integrated terminal.
+- **Either works** for: DQL queries, reading entities (services / hosts / problems / vulnerabilities / Kubernetes / RUM), creating or editing notebooks, dashboards, workflows, and settings.
+
+When in doubt:
+1. Use the path the user just used (continuity beats consistency).
+2. If neither has been used yet, use whichever the user has configured — check `dtctl config current-context` and the MCP server list in `.vscode/mcp.json` / `.mcp.json`.
+3. If both are configured and the task is in the *either-works* bucket, ask the user once which they prefer for this session, then stick with it.
 
 ## Workspace & Temp File Conventions
 - `temp_dtctl_files/` is **only** for tenant-specific experiments (ignored by `.gitignore`; **never** commit tenant names, IDs, or specific artifacts to root).
@@ -46,9 +63,11 @@ Agents (and any subagents they spawn) should treat the **workspace folder** (whe
 
 The spirit of the rule: flexibility for reads when justified, strict guardrails on writes, and transparency about *why* whenever the agent needs to step outside the workspace.
 
-## Connecting to a New Tenant (dtctl)
+## Connecting to a New Tenant
 
-When the user asks to connect to / switch to a new Dynatrace tenant ID (e.g. `bhs56704`, `dff72816`):
+When the user asks to connect to / switch to a new Dynatrace tenant ID (e.g. `abc12345`, `xyz98765`), the agent first asks **which path(s) the user wants the new tenant reachable from** — `dtctl`, MCP, or both. Most users want both; some only use one. Then walk the matching procedure(s) below.
+
+### Path A — dtctl context
 
 1. Run `dtctl config get-contexts` to see if the context already exists. If it does, just `dtctl config use-context <id>` and verify.
 2. If it is new, ask the user (e.g. via `vscode_askQuestions`) for two inputs:
@@ -65,14 +84,37 @@ When the user asks to connect to / switch to a new Dynatrace tenant ID (e.g. `bh
    Use async terminal mode (~15s timeout). The command opens a browser for SSO and on success prints `Context '<id>' configured and activated`. Tokens are stored in the OS credential store (Windows Credential Manager on Windows, Keychain on macOS, libsecret on Linux) under `<id>-oauth`.
 4. Verify with `dtctl config current-context; dtctl auth whoami --plain`.
 
-**Notes**
+**Notes (Path A)**
 - `dtctl auth login` auto-detects the environment class (prod/sprint/hard) from the URL and selects the matching OAuth client + SSO host (`sso.dynatrace.com` for prod/classic, `sso-sprint.dynatracelabs.com` for sprint).
 - Login also activates the new context — no separate `use-context` step needed.
-- This only configures the **dtctl** context. Copilot's MCP routing is separate — entries in `.mcp.json` are **tenant routings** of this workspace's local MCP server. Add a tenant routing only if you want Copilot to reach that tenant by name; dtctl-only access does not require it.
 - **Who can do this**: anyone with valid Dynatrace credentials for the target tenant. Sprint/lab tenants are restricted to Dynatrace internal accounts because their SSO host doesn't accept external identities; production and classic tenants are open to any authorised user of that tenant.
-- Do **not** add tenant-specific IDs to root source files. Per-tenant artifacts go in `temp_dtctl_files/` (or another `temp_<type>_files/` folder).
-- After connecting, tell the user whether a matching `.mcp.json` tenant routing also needs to be added.
-- After a successful connect, **offer to record a nickname** for the tenant in the Local Tenant Nickname Registry (next section).
+
+### Path B — MCP server entry
+
+MCP reaches a tenant via a named server entry in **both** `.vscode/mcp.json` and `.mcp.json` (kept in sync). This path is independent of dtctl — you can configure MCP without ever installing dtctl.
+
+1. Ask the user for a **nickname** (free text, lowercased; the chat invocation will be *"use the `<nickname>` server, …"*) and the **environment URL** (same three URL options as Path A).
+2. Add a parallel server entry under the top-level `"servers"` key in `.vscode/mcp.json`:
+   ```jsonc
+   "<nickname>": {
+     "type": "stdio",
+     "command": "npx",
+     "args": ["-y", "@dynatrace-oss/dynatrace-mcp-server@latest", "--stdio"],
+     "env": { "DT_ENVIRONMENT": "https://<id>.<class-suffix>" }
+   }
+   ```
+3. Mirror the **same entry** into `.mcp.json` under the top-level `"mcpServers"` key (the only structural difference between the two files). Both files must stay in sync.
+4. Reload the MCP servers (VS Code: *MCP: Reload Servers*) and verify with `get_environment_info` against the new server.
+
+**Notes (Path B)**
+- MCP authentication uses the OAuth flow built into `@dynatrace-oss/dynatrace-mcp-server`; first call to a new server triggers a browser sign-in.
+- One server entry = one tenant. Multiple tenants = multiple entries (no `use-context` equivalent — the user picks the server by name in chat).
+- Safety levels are not a built-in MCP concept; access is governed by the OAuth scopes the user grants at sign-in.
+
+### Both paths
+
+- Do **not** add tenant-specific IDs to root source files **other than** the two `mcp.json` files. Per-tenant artifacts go in `temp_dtctl_files/` (or another `temp_<type>_files/` folder).
+- After a successful connect via either path, **offer to record a nickname** for the tenant in the Local Tenant Nickname Registry (next section). The same nickname works for both `"switch to <nickname>"` (dtctl) and *"use the `<nickname>` server"* (MCP) — that's the intended single-identity pattern.
 
 ## Local Tenant Nickname Registry
 
@@ -86,7 +128,7 @@ This path lives under `temp_dtctl_files/`, which is `.gitignore`d, so the regist
 
 **Seeding rule.** The registry only ever contains tenants the user has actually authenticated against. On a fresh clone the agent creates an empty file (`{ "schema": 1, "tenants": [] }`) — *not* a pre-seeded list. After the first successful `dtctl auth login`, the agent offers to record the new tenant under a nickname.
 
-**dtctl persistence vs. agent behavior.** `dtctl config current-context` is **persistent on disk** — once you switch, it stays switched until you switch again, including across VS Code restarts. The agent treats this as the source of truth: at session start it runs `dtctl config current-context`, reports the active context in one line, and **does not change it without an explicit user instruction**. There is no concept of a global "default tenant."
+**dtctl persistence vs. agent behavior.** `dtctl config current-context` is **persistent on disk** — once you switch, it stays switched until you switch again, including across VS Code restarts. When dtctl is configured the agent treats this as the source of truth at session start, reports the active context in one line, and **does not change it without an explicit user instruction**. When only MCP is configured the agent reports the active MCP server(s) instead. There is no concept of a global "default tenant."
 
 **Schema** (JSON, lowercase nicknames):
 ```jsonc
@@ -140,14 +182,19 @@ Proceed?
 ```
 
 ### Session start
-At session start the agent runs `dtctl config current-context` and reports the active context in one line, e.g. `Active dtctl context: <NICKNAME> · <TENANTID> · <class> · <safety>` (resolving via the registry where possible). It does **not** auto-switch. If the active context is unknown to the registry, the agent asks the user how to proceed.
+At session start the agent reports the active tenant context in one line, using whichever path(s) are configured (resolving via the registry where possible):
+- If dtctl is configured: run `dtctl config current-context` and emit `Active dtctl context: <NICKNAME> · <TENANTID> · <class> · <safety>`.
+- If only MCP is configured: list the configured MCP server(s) from `.vscode/mcp.json` / `.mcp.json` and emit `Active MCP server: <NICKNAME> · <TENANTID>` (one line per server if multiple).
+- If both are configured: emit one line for each.
+
+The agent does **not** auto-switch. If an active context is unknown to the registry, the agent asks the user how to proceed.
 
 ### Edge cases
 - **Same tenant ID, multiple safety levels**: allowed — nickname is the key, not the ID (e.g. `<NICKNAME>-ro` and `<NICKNAME>-rw` for the same tenant).
 - **Hand edits**: honor them. The agent must treat user edits as truth and not silently rewrite.
 - **Removal**: confirm before removing. Offer to also `dtctl auth logout --context <id>` if the user is decommissioning entirely.
 - **First run on a fresh clone**: the file does not exist. Auto-create `temp_dtctl_files/tenant-memory/` and an empty `tenants.json` (`{ "schema": 1, "tenants": [] }`) before adding the first nickname. Suggest the public baseline tenant `guu84124` (`demo.live.dynatrace.com`) as a safe first connection — the user may nickname it `demo.live` (matching its public URL) or anything else.
-- **MCP exception**: `.mcp.json` is the **one allowed location** in the repo where tenant IDs may appear, because VS Code reads it as a real file. The nickname registry does not replace it; users who want Copilot to reach a tenant by name must still add a tenant routing entry to `.mcp.json` by hand (see `ARCHITECTURE.md` → *MCP Server*).
+- **MCP exception**: `.mcp.json` and `.vscode/mcp.json` are the **only allowed locations** in the repo where tenant IDs may appear, because VS Code and the MCP launcher read them as real files. The nickname registry does not replace them; users who want the AI to reach a tenant via MCP must add a server entry in both files (see *Connecting to a New Tenant* → Path B above and `ARCHITECTURE.md` → *MCP Server*).
 
 ## DQL Rules (All Agents)
 - Use unique `event.type` + `event.provider` for workflow isolation.

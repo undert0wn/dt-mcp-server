@@ -10,6 +10,22 @@ An AI-powered observability workspace for Dynatrace — combining GitHub Copilot
 
 ---
 
+## This is an MCP repo (and `dtctl` is a separate one)
+
+To be unambiguous: **this repository is an MCP workspace.** It configures the [Dynatrace MCP server](https://github.com/dynatrace-oss/dynatrace-mcp) so an AI assistant (Copilot, Claude) can talk to your Dynatrace tenant in-process, and it ships skills, prompts, and conventions on top of that.
+
+**`dtctl` is a completely different project, in a completely different repository, owned and released independently:** [github.com/dynatrace-oss/dtctl](https://github.com/dynatrace-oss/dtctl). It's a kubectl-style CLI for Dynatrace. Nothing in this repo builds, ships, or vendors it.
+
+That said, **this workspace is configured assuming you have `dtctl` installed alongside MCP**, and the agent prompts/skills are written to use the best of both:
+
+- **MCP** is preferred for things it does best (Davis CoPilot chat, Davis Analyzers, ad-hoc Slack/email, `send_event`, NL→DQL helpers, structured-JSON-direct-to-the-AI).
+- **`dtctl`** is preferred for things *it* does best (declarative `apply`/`diff`/`history`/`restore`, `share`/`unshare`, persistent multi-context with safety levels, custom output formats, anything you want to *see* in the terminal).
+- For the large overlap (DQL queries, reading entities, creating/editing notebooks/dashboards/workflows/settings), either one works — the AI follows a small selection rubric documented in [CONVENTIONS.md](CONVENTIONS.md#tool-selection-mcp-vs-dtctl) and continuity rules.
+
+You can run this workspace **MCP-only** if you skip Step 3 — most things still work, but you'll lose the `dtctl`-only column from the [capability table](#two-paths-to-dynatrace) below. The full experience expects both.
+
+---
+
 ## What's Inside
 
 ```
