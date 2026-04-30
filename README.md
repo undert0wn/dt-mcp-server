@@ -29,13 +29,14 @@ You can run this workspace **MCP-only** if you skip Step 3 — most things still
 ## What's Inside
 
 ```
-dynatrace-ai-workspace/
-├── CHEATSHEET.md                 # Quick reference — 7 copy-paste DQL queries and critical rules
-├── ARCHITECTURE.md               # How the workspace is built and how components connect
-├── CONVENTIONS.md                # Single source of truth for all agent rules (reconciliation, DQL, Sync Checklist)
+dt-mcp-server/
 ├── README.md                     # Setup guide and quick reference
+├── CHANGELOG.md                  # Workspace release notes (this repo only — see file for dtctl history link)
+├── ARCHITECTURE.md               # How the workspace is built and how components connect
+├── CONVENTIONS.md                # Single source of truth for all agent rules (Tool Selection rubric, reconciliation, DQL, Sync Checklist)
+├── CHEATSHEET.md                 # Quick reference — copy-paste DQL queries and critical rules
 ├── CLAUDE.md                     # Auto-loaded session briefing for Claude Code
-├── scripts/                      # Validation helpers (validate-tenant-write.ps1 runs before any dtctl tenant write)
+├── LICENSE
 ├── skills-lock.json              # Locked skill versions
 ├── .gitignore
 ├── .github/
@@ -48,13 +49,17 @@ dynatrace-ai-workspace/
 │       ├── troubleshoot-problem.prompt.md
 │       ├── incident-response.prompt.md
 │       └── performance-regression.prompt.md
-├── .agents/skills/               # 13 Dynatrace domain skills
+├── .agents/skills/               # 17 domain skills (Dynatrace observability + dtctl + workflow helpers)
 ├── .claude/skills/               # Symlinks for Claude Code compatibility
-├── .mcp.json                     # MCP server configuration for Copilot CLI
+├── .mcp.json                     # MCP server entries (CLI / Claude Code)
 ├── .vscode/
-│   └── mcp.json                  # MCP server configuration for VS Code Copilot
-└── demos/
-    └── ai-observability-demo.md  # Demo script
+│   └── mcp.json                  # MCP server entries (VS Code + GitHub Copilot)
+├── scripts/                      # Validation helpers (validate-tenant-write.ps1 runs before any tenant write — MCP or dtctl)
+├── completions/                  # dtctl shell completions (bash, fish, zsh)
+├── docs/
+│   └── images/                   # README screenshots (e.g. tenant-id-location.png)
+├── demos/                        # Demo scripts (e.g. ai-observability-demo.md)
+└── temp_dtctl_files/             # Local-only tenant experiments + nickname registry (gitignored, never pushed)
 ```
 
 | What | Why | Get It |
@@ -62,7 +67,7 @@ dynatrace-ai-workspace/
 | [VS Code](https://code.visualstudio.com/) | Where you will work with the AI | Download from code.visualstudio.com |
 | GitHub Copilot or Claude Code | The AI brain | Copilot: github.com/features/copilot (subscription) · Claude: claude.ai/code |
 | [Node.js](https://nodejs.org/) v18+ | Powers the skill installer and MCP server | Download LTS version |
-| [dtctl](https://github.com/dynatrace-oss/dtctl) | Lets you verify what the AI creates (notebooks, dashboards, etc.) | See Step 3 below |
+| [dtctl](https://github.com/dynatrace-oss/dtctl) | Optional companion CLI — recommended for the full experience (see *Two paths to Dynatrace* table below) | See Step 3 below |
 | A Dynatrace environment | Live data source | Any `*.apps.dynatrace.com` tenant you have access to |
 
 ---
